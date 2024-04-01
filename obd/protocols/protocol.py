@@ -45,24 +45,29 @@ Basic data models for all protocols to use
 
 
 class ECU_HEADER:
-    """ Values for the ECU headers """
-    ENGINE = b'7E0'
+    """Values for the ECU headers"""
+
+    ENGINE = b"7E0"
 
 
 class ECU:
-    """ constant flags used for marking and filtering messages """
+    """constant flags used for marking and filtering messages"""
 
     ALL = 0b11111111  # used by OBDCommands to accept messages from any ECU
-    ALL_KNOWN = 0b11111110  # used to ignore unknown ECUs, since this lib probably can't handle them
+    ALL_KNOWN = (
+        0b11111110  # used to ignore unknown ECUs, since this lib probably can't handle them
+    )
 
     # each ECU gets its own bit for ease of making OR filters
-    UNKNOWN = 0b00000001  # unknowns get their own bit, since they need to be accepted by the ALL filter
+    UNKNOWN = (
+        0b00000001  # unknowns get their own bit, since they need to be accepted by the ALL filter
+    )
     ENGINE = 0b00000010
     TRANSMISSION = 0b00000100
 
 
 class Frame(object):
-    """ represents a single parsed line of OBD output """
+    """represents a single parsed line of OBD output"""
 
     def __init__(self, raw):
         self.raw = raw
@@ -77,7 +82,7 @@ class Frame(object):
 
 
 class Message(object):
-    """ represents a fully parsed OBD message of one or more Frames (lines) """
+    """represents a fully parsed OBD message of one or more Frames (lines)"""
 
     def __init__(self, frames):
         self.frames = frames
@@ -95,11 +100,11 @@ class Message(object):
         return hexlify(self.data)
 
     def raw(self):
-        """ returns the original raw input string from the adapter """
+        """returns the original raw input string from the adapter"""
         return "\n".join([f.raw for f in self.frames])
 
     def parsed(self):
-        """ boolean for whether this message was successfully parsed """
+        """boolean for whether this message was successfully parsed"""
         return bool(self.data)
 
     def __eq__(self, other):
@@ -136,20 +141,20 @@ class Protocol(object):
 
     def __init__(self, lines_0100):
         """
-            constructs a protocol object
+        constructs a protocol object
 
-            uses a list of raw strings from the
-            car to determine the ECU layout.
+        uses a list of raw strings from the
+        car to determine the ECU layout.
         """
 
         # create the default, empty map
         # for example: self.TX_ID_ENGINE : ECU.ENGINE
         self.ecu_map = {}
 
-        if (self.TX_ID_ENGINE is not None):
+        if self.TX_ID_ENGINE is not None:
             self.ecu_map[self.TX_ID_ENGINE] = ECU.ENGINE
 
-        if (self.TX_ID_TRANSMISSION is not None):
+        if self.TX_ID_TRANSMISSION is not None:
             self.ecu_map[self.TX_ID_TRANSMISSION] = ECU.TRANSMISSION
 
         # parse the 0100 data into messages
@@ -168,9 +173,9 @@ class Protocol(object):
 
     def __call__(self, lines):
         """
-            Main function
+        Main function
 
-            accepts a list of raw strings from the car, split by lines
+        accepts a list of raw strings from the car, split by lines
         """
 
         # ---------------------------- preprocess ----------------------------
@@ -183,7 +188,7 @@ class Protocol(object):
 
         for line in lines:
 
-            line_no_spaces = line.replace(' ', '')
+            line_no_spaces = line.replace(" ", "")
 
             if isHex(line_no_spaces):
                 obd_lines.append(line_no_spaces)
@@ -237,11 +242,11 @@ class Protocol(object):
 
     def populate_ecu_map(self, messages):
         """
-            Given a list of messages from different ECUS,
-            (in response to the 0100 PID listing command)
-            associate each tx_id to an ECU ID constant.
+        Given a list of messages from different ECUS,
+        (in response to the 0100 PID listing command)
+        associate each tx_id to an ECU ID constant.
 
-            This is mostly concerned with finding the engine.
+        This is mostly concerned with finding the engine.
         """
 
         # filter out messages that don't contain any data
@@ -295,24 +300,24 @@ class Protocol(object):
 
     def parse_frame(self, frame):
         """
-            override in subclass for each protocol
+        override in subclass for each protocol
 
-            Function recieves a Frame object preloaded
-            with the raw string line from the car.
+        Function recieves a Frame object preloaded
+        with the raw string line from the car.
 
-            Function should return a boolean. If fatal errors were
-            found, this function should return False, and the Frame will be dropped.
+        Function should return a boolean. If fatal errors were
+        found, this function should return False, and the Frame will be dropped.
         """
         raise NotImplementedError()
 
     def parse_message(self, message):
         """
-            override in subclass for each protocol
+        override in subclass for each protocol
 
-            Function recieves a Message object
-            preloaded with a list of Frame objects.
+        Function recieves a Message object
+        preloaded with a list of Frame objects.
 
-            Function should return a boolean. If fatal errors were
-            found, this function should return False, and the Message will be dropped.
+        Function should return a boolean. If fatal errors were
+        found, this function should return False, and the Message will be dropped.
         """
         raise NotImplementedError()

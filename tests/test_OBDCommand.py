@@ -7,8 +7,8 @@ def test_constructor():
     # default constructor
     #                 name       description        cmd  bytes decoder ECU
     cmd = OBDCommand("Test", "example OBD command", b"0123", 2, noop, ECU.ENGINE)
-    assert cmd.name is "Test"
-    assert cmd.desc is "example OBD command"
+    assert cmd.name == "Test"
+    assert cmd.desc == "example OBD command"
     assert cmd.command == b"0123"
     assert cmd.bytes == 2
     assert cmd.decode == noop
@@ -39,7 +39,9 @@ def test_clone():
 
 
 def test_call():
-    p = SAE_J1850_PWM(["48 6B 10 41 00 FF FF FF FF AA"])  # train the ecu_map to identify the engine
+    p = SAE_J1850_PWM(
+        ["48 6B 10 41 00 FF FF FF FF AA"]
+    )  # train the ecu_map to identify the engine
     messages = p(["48 6B 10 41 00 BE 1F B8 11 AA"])  # parse valid data into response object
 
     print(messages[0].data)

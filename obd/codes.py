@@ -1798,7 +1798,6 @@ DTC = {
     "P3495": "Cylinder 12 Exhaust Valve Control Circuit Low",
     "P3496": "Cylinder 12 Exhaust Valve Control Circuit High",
     "P3497": "Cylinder Deactivation System",
-
     "U0001": "High Speed CAN Communication Bus",
     "U0002": "High Speed CAN Communication Bus (Performance)",
     "U0003": "High Speed CAN Communication Bus (Open)",
@@ -2119,7 +2118,7 @@ SPARK_TESTS = [
     None,
     "OXYGEN_SENSOR_MONITORING",
     "OXYGEN_SENSOR_HEATER_MONITORING",
-    "EGR_VVT_SYSTEM_MONITORING"
+    "EGR_VVT_SYSTEM_MONITORING",
 ]
 
 COMPRESSION_TESTS = [

@@ -12,8 +12,8 @@ FLOAT_EQUALS_TOLERANCE = 0.025
 
 # comparison for pint floating point values
 def float_equals(va, vb):
-    units_match = (va.u == vb.u)
-    values_match = (abs(va.magnitude - vb.magnitude) < FLOAT_EQUALS_TOLERANCE)
+    units_match = va.u == vb.u
+    values_match = abs(va.magnitude - vb.magnitude) < FLOAT_EQUALS_TOLERANCE
     return values_match and units_match
 
 
@@ -283,7 +283,9 @@ def test_28():
 def test_29():
     assert UAS_IDS[0x29](b("0000")) == 0 * Unit.pascal / Unit.second
     assert UAS_IDS[0x29](b("0004")) == 1 * Unit.pascal / Unit.second
-    assert UAS_IDS[0x29](b("FFFF")) == 16383.75 * Unit.pascal / Unit.second  # deviates from standard examples
+    assert (
+        UAS_IDS[0x29](b("FFFF")) == 16383.75 * Unit.pascal / Unit.second
+    )  # deviates from standard examples
 
 
 def test_2A():
@@ -418,9 +420,9 @@ def test_3D():
 
 
 def test_3E():
-    assert float_equals(UAS_IDS[0x3E](b("0000")), 0 * Unit.millimeter ** 2)
-    assert float_equals(UAS_IDS[0x3E](b("8000")), 1.9999 * Unit.millimeter ** 2)
-    assert float_equals(UAS_IDS[0x3E](b("FFFF")), 3.9999 * Unit.millimeter ** 2)
+    assert float_equals(UAS_IDS[0x3E](b("0000")), 0 * Unit.millimeter**2)
+    assert float_equals(UAS_IDS[0x3E](b("8000")), 1.9999 * Unit.millimeter**2)
+    assert float_equals(UAS_IDS[0x3E](b("FFFF")), 3.9999 * Unit.millimeter**2)
 
 
 def test_3F():

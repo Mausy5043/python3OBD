@@ -11,7 +11,9 @@ def test_ECU():
         assert (ECU.ALL & ecu) > 0, "ECU: %d is not included in ECU.ALL" % ecu
 
         for other_ecu in tested:
-            assert (ecu & other_ecu) == 0, "ECU: %d has a conflicting bit with another ECU constant" % ecu
+            assert (ecu & other_ecu) == 0, (
+                "ECU: %d has a conflicting bit with another ECU constant" % ecu
+            )
 
         tested.append(ecu)
 
@@ -25,7 +27,7 @@ def test_frame():
     assert frame.rx_id is None
     assert frame.tx_id is None
     assert frame.type is None
-    assert frame.seq_index is 0
+    assert frame.seq_index == 0
     assert frame.data_len is None
 
 
@@ -48,9 +50,9 @@ def test_message():
 
 def test_message_hex():
     message = Message([])
-    message.data = b'\x00\x01\x02'
+    message.data = b"\x00\x01\x02"
 
-    assert message.hex() == b'000102'
+    assert message.hex() == b"000102"
     assert int(message.hex()[0:2], 16) == 0x00
     assert int(message.hex()[2:4], 16) == 0x01
     assert int(message.hex()[4:6], 16) == 0x02

@@ -12,7 +12,7 @@ from obd.utils import OBDStatus
 
 class FakeELM:
     """
-        Fake ELM327 driver class for intercepting the commands from the API
+    Fake ELM327 driver class for intercepting the commands from the API
     """
 
     def __init__(self, port_name):
@@ -48,7 +48,7 @@ class FakeELM:
 
         # all commands succeed
         message = Message([])
-        message.data = bytearray(b'response data')
+        message.data = bytearray(b"response data")
         message.ecu = ECU.ENGINE  # picked engine so that simple commands like RPM will work
         return [message]
 
@@ -59,13 +59,9 @@ class FakeELM:
 
 
 # a toy command to test with
-command = OBDCommand("Test_Command",
-                     "A test command",
-                     b"0123456789ABCDEF",
-                     0,
-                     noop,
-                     ECU.ALL,
-                     True)
+command = OBDCommand(
+    "Test_Command", "A test command", b"0123456789ABCDEF", 0, noop, ECU.ALL, True
+)
 
 
 def test_is_connected():
@@ -79,8 +75,8 @@ def test_is_connected():
 
 def test_status():
     """
-        Make sure that the API's status() function reports the
-        same values as the underlying ELM327 class.
+    Make sure that the API's status() function reports the
+    same values as the underlying ELM327 class.
     """
     o = obd.OBD("/dev/null")
     assert o.status() == OBDStatus.NOT_CONNECTED
@@ -114,8 +110,8 @@ def test_supports():
 
 def test_port_name():
     """
-        Make sure that the API's port_name() function reports the
-        same values as the underlying ELM327 class.
+    Make sure that the API's port_name() function reports the
+    same values as the underlying ELM327 class.
     """
     o = obd.OBD("/dev/null")
     o.interface = FakeELM("/dev/null")

@@ -125,9 +125,7 @@ class CANProtocol(Protocol):
         #             v
         # 00 00 07 E8 06 41 00 BE 7F B8 13
         frame.type = frame.data[0] & 0xF0
-        if frame.type not in [self.FRAME_TYPE_SF,
-                              self.FRAME_TYPE_FF,
-                              self.FRAME_TYPE_CF]:
+        if frame.type not in [self.FRAME_TYPE_SF, self.FRAME_TYPE_FF, self.FRAME_TYPE_CF]:
             logger.debug("Dropping frame carrying unknown PCI frame type")
             return False
 
@@ -175,7 +173,7 @@ class CANProtocol(Protocol):
             #             [      Frame       ]
             #                [     Data      ]
             # 00 00 07 E8 06 41 00 BE 7F B8 13 xx xx xx xx, anything else is ignored
-            message.data = frame.data[1:1 + frame.data_len]
+            message.data = frame.data[1 : 1 + frame.data_len]
 
         else:
             # sort FF and CF into their own lists
@@ -252,7 +250,7 @@ class CANProtocol(Protocol):
                 message.data += f.data[1:]  # chop off the PCI byte
 
             # chop to the correct size (as specified in the first frame)
-            message.data = message.data[:ff[0].data_len]
+            message.data = message.data[: ff[0].data_len]
 
         # trim DTC requests based on DTC count
         # this ISN'T in the decoder because the legacy protocols
@@ -265,7 +263,9 @@ class CANProtocol(Protocol):
             #       [DTC] [DTC] [DTC]
 
             num_dtc_bytes = message.data[1] * 2  # each DTC is 2 bytes
-            message.data = message.data[:(num_dtc_bytes + 2)]  # add 2 to account for mode/DTC_count bytes
+            message.data = message.data[
+                : (num_dtc_bytes + 2)
+            ]  # add 2 to account for mode/DTC_count bytes
 
         return True
 
