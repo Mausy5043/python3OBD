@@ -72,6 +72,7 @@ There are sometimes connection issues when using a Bluetooth OBD-II adapter with
 ```Python
 fast=False, timeout=30
 ```
+The BT adapter must have previously been paired with the device.
 
 License
 -------
